@@ -239,7 +239,7 @@ class UserController extends Controller
 
             $user = User::findOrFail($id);
 
-            $user->accessRecords()->delete();
+           
             $user->vehicles()->delete();
  
             // Eliminar el usuario

@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { FaSignOutAlt, FaUser, FaCar, FaParking } from 'react-icons/fa';
+import Usuarios from './Users';
+import Vehiculos from './Vehicles'; // Componente similar para vehículos
+import Parkings from './Parkings';   // Componente similar para parkings
 import './Home.css';
 
 const Home = () => {
-  const [activeSection, setActiveSection] = useState('usuarios');
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    window.location.href = '/';
+    navigate('/');
   };
 
   return (
     <div className="home-container">
-      {/* Header */}
       <header className="home-header">
         <h1>Sistema de Parking</h1>
         <button onClick={handleLogout} className="logout-btn">
@@ -20,33 +23,35 @@ const Home = () => {
         </button>
       </header>
 
-      {/* Navegación */}
       <nav className="sections-nav">
         <button 
-          className={`section-btn ${activeSection === 'usuarios' ? 'active' : ''}`}
-          onClick={() => setActiveSection('usuarios')}
+          className="section-btn"
+          onClick={() => navigate('/home')}
         >
           <FaUser /> Usuarios
         </button>
         <button 
-          className={`section-btn ${activeSection === 'vehiculos' ? 'active' : ''}`}
-          onClick={() => setActiveSection('vehiculos')}
+          className="section-btn"
+          onClick={() => navigate('/home/vehiculos')}
         >
           <FaCar /> Vehículos
         </button>
         <button 
-          className={`section-btn ${activeSection === 'parkings' ? 'active' : ''}`}
-          onClick={() => setActiveSection('parkings')}
+          className="section-btn"
+          onClick={() => navigate('/home/parkings')}
         >
           <FaParking /> Parkings
         </button>
       </nav>
 
-      {/* Contenido dinámico */}
       <main className="content-area">
-        {activeSection === 'usuarios' && <div className="usuarios-content"></div>}
-        {activeSection === 'vehiculos' && <div className="vehiculos-content"></div>}
-        {activeSection === 'parkings' && <div className="parkings-content"></div>}
+        <Routes>
+          <Route path="usuarios" element={<Usuarios />} />
+          <Route path="vehiculos" element={<Vehiculos />} />
+          <Route path="parkings" element={<Parkings />} />
+          {/* Ruta por defecto */}
+          <Route path="*" element={<Usuarios />} />
+        </Routes>
       </main>
     </div>
   );
