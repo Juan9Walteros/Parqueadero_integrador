@@ -71,13 +71,7 @@ class AccessRecordsController extends Controller
 
         try {
 
-            if (AuthHelper::isUser())
-            {
-                return response()->json([
-                 
-                    'message' => 'el usuario no es un administrador'   
-                ]);
-            }
+            
             // Buscar el usuario por su ID
 
             $accessrecords = Access_records::findOrFail($id);

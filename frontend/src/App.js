@@ -8,6 +8,7 @@ import Register from './components/Register';
 import CreateUser from './components/CreateUser';
 import EditUser from './components/EditUser';
 import CreateVehicle from './components/CreateVehicle';
+import UserHome from './components/Home-User';
 
  
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/crear-usuario" element={<CreateUser />} />
         <Route path="/editar-usuario/:id" element={<EditUser />} />
         <Route path="/vehicles/create" element={<CreateVehicle />} />
+        <Route path="/Home-User" element={<UserHome />} />
 
       </Routes>
     </BrowserRouter>

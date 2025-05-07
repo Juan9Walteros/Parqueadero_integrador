@@ -23,15 +23,20 @@ const Login = () => {
 
       // Guardar datos de autenticación
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId", response.data.user.id); // Guardar el ID del usuario
       if (rememberMe) {
         localStorage.setItem("rememberMe", "true");
       }
 
       setMessage("Inicio de sesión exitoso");
       
-      // Redirección a Home después de 1 segundo
+      // Redirección según el ID del usuario
       setTimeout(() => {
-        navigate("/home");
+        if (response.data.user.id === 1) {
+          navigate("/home"); // Admin
+        } else {
+          navigate("/home-user"); // Usuario regular
+        }
       }, 1000);
       
     } catch (err) {
