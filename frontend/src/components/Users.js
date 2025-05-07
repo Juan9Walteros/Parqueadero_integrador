@@ -53,6 +53,13 @@ const Users = () => {
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Mapeo de roles
+  const roleMap = {
+    1: 'Admin',
+    2: 'Usuario',
+    3: 'Celador'
+  };
+
   return (
     <div className="users-container">
       <header className="home-header">
@@ -117,9 +124,17 @@ const Users = () => {
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.phone || '-'}</td>
-                    <td>{user.role_id === 1 ? 'Admin' : 'Usuario'}</td>
                     <td>
-                      
+                      {/* Mostrar el rol basado en el id_rol */}
+                      {roleMap[user.id_rol] || 'Desconocido'}
+                    </td>
+                    <td>
+                      <button
+                        className="edit-btn"
+                        onClick={() => navigate(`/editar-usuario/${user.id}`)}
+                      >
+                        <FaEdit />
+                      </button>
                       <button
                         className="delete-btn"
                         onClick={() => handleDelete(user.id)}

@@ -4,20 +4,24 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './EditUser.css';
 
 const UserEdit = () => {
-  const { id } = useParams();  // Usamos useParams para obtener el ID de la URL
+  const { id } = useParams();
   const navigate = useNavigate();
   
-  const [user, setUser] = useState(null); // Inicializamos user como null
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    id_rol: 2,
+    password: '',
+    password_confirmation: '' // Campo adicional para confirmación
+  });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(true); // Estado de carga, inicia como true
-  const [confirmPassword, setConfirmPassword] = useState(''); // Para la confirmación de contraseña
+  const [loading, setLoading] = useState(true);
 
-  // UseEffect para cargar los datos del usuario cuando el componente se monta
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        setLoading(true); // Hacemos que el loading empiece al comenzar
         const response = await axios.get(`/api/users/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -25,161 +29,166 @@ const UserEdit = () => {
         });
 
         if (response.data.user) {
-          setUser(response.data.user); // Establecemos el usuario recibido de la API
-          setLoading(false); // Terminamos el loading
-        } else {
-          setError('Usuario no encontrado');
-          setLoading(false);
+          setUser({
+            name: response.data.user.name || '',
+            email: response.data.user.email || '',
+            phone: response.data.user.phone || '',
+            id_rol: response.data.user.id_rol || 2,
+            password: '', // Dejamos vacío para nueva contraseña
+            password_confirmation: '' // Inicializamos confirmación
+          });
         }
       } catch (err) {
+        setError(err.response?.data?.message || 'Error al cargar usuario');
+      } finally {
         setLoading(false);
-        console.error("Error al obtener el usuario:", err);
-        setError(err.response ? err.response.data.message || 'Error desconocido' : 'Error al obtener el usuario');
       }
     };
 
-    fetchUser(); // Llamamos a la función para obtener el usuario
+    fetchUser();
   }, [id]);
 
-  // Si el componente está cargando, mostramos un mensaje
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
-
-  // Si no encontramos al usuario, mostramos un mensaje de error
-  if (!user) {
-    return <div>No se encontró el usuario</div>;
-  }
-
-  // Función para manejar el cambio en los campos de formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser((prevState) => ({
-      ...prevState,
-      [name]: value, // Actualizamos solo el campo que ha cambiado
-    }));
+    setUser(prev => ({ ...prev, [name]: value }));
   };
 
-  // Función para manejar el cambio en el campo de confirmación de contraseña
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
-  };
-
-  // Función para manejar el envío del formulario de edición
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-    // Verificación de que las contraseñas coinciden
-    if (user.password !== confirmPassword) {
+    // Validación básica de contraseña
+    if (user.password && user.password !== user.password_confirmation) {
       setError('Las contraseñas no coinciden');
-      return; // Si las contraseñas no coinciden, no enviamos el formulario
+      setLoading(false);
+      return;
     }
 
-    setLoading(true); // Activamos el estado de carga
-    setError(''); // Limpiamos el mensaje de error
-    setSuccess(''); // Limpiamos el mensaje de éxito
-
     try {
-      const response = await axios.put(`/api/users/${id}`, user, {
+      const response = await axios.put(`/api/users/${id}`, {
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        id_rol: user.id_rol,
+        password: user.password || undefined, // Envía undefined si está vacío
+        password_confirmation: user.password ? user.password_confirmation : undefined
+      }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
 
-      if (response.data.user) {
-        setSuccess('Usuario actualizado correctamente');
-        setLoading(false);
-        navigate('/usuarios'); // Redirigimos a la lista de usuarios
-      }
+      setSuccess('Usuario actualizado correctamente');
+      setTimeout(() => navigate('/usuarios'), 1500);
     } catch (err) {
+      console.error("Error:", err.response?.data);
+      setError(
+        err.response?.data?.message || 
+        Object.values(err.response?.data?.errors || {}).flat().join(', ') || 
+        'Error al actualizar usuario'
+      );
+    } finally {
       setLoading(false);
-      console.error("Error al actualizar el usuario:", err);
-      if (err.response && err.response.data.errors) {
-        const errorMessages = Object.values(err.response.data.errors).flat();
-        setError(errorMessages.join(', '));
-      } else {
-        setError('Hubo un error al actualizar el usuario');
-      }
     }
   };
 
+  if (loading) return <div className="loading">Cargando usuario...</div>;
+
   return (
     <div className="user-edit-container">
-      <header className="header">
-        <h1>Editar Usuario</h1>
-      </header>
+      <h1>Editar Usuario</h1>
+      
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
 
-      <main>
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Nombre</label>
+          <input
+            type="text"
+            name="name"
+            value={user.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Nombre</label>
-            <input
-              type="text"
-              name="name"
-              value={user.name || ''}
-              onChange={handleChange}
-            />
-          </div>
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div>
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={user.email || ''}
-              onChange={handleChange}
-            />
-          </div>
+        <div className="form-group">
+          <label>Teléfono</label>
+          <input
+            type="text"
+            name="phone"
+            value={user.phone}
+            onChange={handleChange}
+          />
+        </div>
 
-          <div>
-            <label>Teléfono</label>
-            <input
-              type="text"
-              name="phone"
-              value={user.phone || ''}
-              onChange={handleChange}
-            />
-          </div>
+        <div className="form-group">
+          <label>Rol</label>
+          <select
+            name="id_rol"
+            value={user.id_rol}
+            onChange={handleChange}
+            required
+          >
+            <option value={1}>Admin</option>
+            <option value={2}>Usuario</option>
+          </select>
+        </div>
 
-          <div>
-            <label>Rol</label>
-            <select
-              name="role_id"
-              value={user.role_id || 2} // Si no hay rol, asignamos el rol por defecto 'Usuario'
-              onChange={handleChange}
-            >
-              <option value={1}>Admin</option>
-              <option value={2}>Usuario</option>
-            </select>
-          </div>
+        <div className="form-group">
+          <label>Nueva Contraseña (dejar vacío para mantener la actual)</label>
+          <input
+            type="password"
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+          />
+        </div>
 
-          <div>
-            <label>Contraseña</label>
+        {user.password && (
+          <div className="form-group">
+            <label>Confirmar Nueva Contraseña</label>
             <input
               type="password"
-              name="password"
-              value={user.password || ''}
+              name="password_confirmation"
+              value={user.password_confirmation}
               onChange={handleChange}
+              placeholder="••••••••"
             />
           </div>
+        )}
 
-          <div>
-            <label>Confirmar Contraseña</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-            />
-          </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? 'Actualizando...' : 'Actualizar Usuario'}
+        <div className="form-actions">
+          <button 
+            type="button" 
+            className="cancel-btn"
+            onClick={() => navigate('/usuarios')}
+          >
+            Cancelar
           </button>
-        </form>
-      </main>
+          <button 
+            type="submit" 
+            className="submit-btn"
+            disabled={loading}
+          >
+            {loading ? 'Guardando...' : 'Guardar Cambios'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

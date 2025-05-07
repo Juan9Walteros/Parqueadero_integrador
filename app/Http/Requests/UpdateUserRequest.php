@@ -33,6 +33,7 @@ class UpdateUserRequest extends FormRequest
             "password" => [
                 "required",
                 PasswordRules::min(8)->letters()->symbols()->numbers(),
+                "unique:users,password," . $user_id
             ],
             "phone" => [
     "required",
