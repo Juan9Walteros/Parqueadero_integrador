@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FaTimes, FaUser, FaLock, FaPhone, FaIdCard } from 'react-icons/fa';
 import './UserModal.css';
-
+ 
 const UserModal = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -10,46 +10,39 @@ const UserModal = ({ onClose, onSuccess }) => {
     password: '',
     password_confirmation: '',
     phone: '',
-    id_rol: 2
+    id_rol: 2, // Valor por defecto: Usuario Normal
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validación
+ 
+    // Validación de contraseñas
     if (formData.password !== formData.password_confirmation) {
       setError('Las contraseñas no coinciden');
       return;
     }
-
+ 
     setLoading(true);
     setError('');
-
+ 
     try {
-      const response = await axios.post('/api/users', {
-        name: formData.name.trim(),
-        email: formData.email.trim().toLowerCase(),
-        password: formData.password,
-        password_confirmation: formData.password_confirmation,
-        phone: formData.phone.trim(),
-        id_rol: formData.id_rol
-      }, {
+      const response = await axios.post('/api/users', formData, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
       });
-
+ 
       if (response.data && response.data.user) {
-        onSuccess(response.data.user);
-        onClose();
+        onSuccess(response.data.user); // Notifica al componente padre
+        onClose(); // Cierra el modal
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Error al crear usuario');
@@ -57,18 +50,18 @@ const UserModal = ({ onClose, onSuccess }) => {
       setLoading(false);
     }
   };
-
+ 
   return (
     <div className="modal-overlay">
       <div className="modal-container">
         <button className="close-btn" onClick={onClose}>
           <FaTimes />
         </button>
-
+ 
         <h2>Crear Nuevo Usuario</h2>
-
+ 
         {error && <div className="error-message">{error}</div>}
-
+ 
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <FaUser className="input-icon" />
@@ -81,7 +74,7 @@ const UserModal = ({ onClose, onSuccess }) => {
               required
             />
           </div>
-
+ 
           <div className="input-group">
             <FaUser className="input-icon" />
             <input
@@ -93,7 +86,7 @@ const UserModal = ({ onClose, onSuccess }) => {
               required
             />
           </div>
-
+ 
           <div className="input-group">
             <FaLock className="input-icon" />
             <input
@@ -106,7 +99,7 @@ const UserModal = ({ onClose, onSuccess }) => {
               minLength="6"
             />
           </div>
-
+ 
           <div className="input-group">
             <FaLock className="input-icon" />
             <input
@@ -118,7 +111,7 @@ const UserModal = ({ onClose, onSuccess }) => {
               required
             />
           </div>
-
+ 
           <div className="input-group">
             <FaPhone className="input-icon" />
             <input
@@ -129,7 +122,7 @@ const UserModal = ({ onClose, onSuccess }) => {
               onChange={handleChange}
             />
           </div>
-
+ 
           <div className="input-group">
             <FaIdCard className="input-icon" />
             <select
@@ -141,18 +134,18 @@ const UserModal = ({ onClose, onSuccess }) => {
               <option value={1}>Administrador</option>
             </select>
           </div>
-
+ 
           <div className="form-actions">
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="cancel-btn"
               onClick={onClose}
               disabled={loading}
             >
               Cancelar
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="submit-btn"
               disabled={loading}
             >
@@ -164,5 +157,5 @@ const UserModal = ({ onClose, onSuccess }) => {
     </div>
   );
 };
-
+ 
 export default UserModal;

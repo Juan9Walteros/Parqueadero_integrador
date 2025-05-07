@@ -1,57 +1,40 @@
-import React, { useState, useEffect } from 'react'; // Añade useEffect aquí
+import React, { useState } from 'react';
 import axios from 'axios';
-import { FaTimes, FaCar, FaPalette, FaIdCardAlt } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import './VehicleModal.css';
-
-// Resto del código permanece igual...
-
-// Resto del código permanece igual...
-
+ 
 const VehicleModal = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     plate: '',
     marca: '',
     model: '',
     color: '',
-    id_type: 1 // Valor por defecto
+    user_id: '', // ID del usuario asociado
   });
-  const [types, setTypes] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchTypes = async () => {
-      try {
-        const response = await axios.get('/api/vehicle-types');
-        setTypes(response.data.types || []);
-      } catch (err) {
-        console.error('Error al cargar tipos de vehículo:', err);
-      }
-    };
-    fetchTypes();
-  }, []);
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
-
+    setLoading(true);
+ 
     try {
       const response = await axios.post('/api/vehicles', formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
-
+ 
       if (response.data && response.data.vehicle) {
-        onSuccess(response.data.vehicle);
-        onClose();
+        onSuccess(response.data.vehicle); // Notifica al componente padre
+        onClose(); // Cierra el modal
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar vehículo');
@@ -59,99 +42,94 @@ const VehicleModal = ({ onClose, onSuccess }) => {
       setLoading(false);
     }
   };
-
+ 
   return (
     <div className="modal-overlay">
       <div className="modal-container">
         <button className="close-btn" onClick={onClose}>
           <FaTimes />
         </button>
-
-        <h2>Registrar Nuevo Vehículo</h2>
-
+ 
+        <h2>Registrar Vehículo</h2>
+ 
         {error && <div className="error-message">{error}</div>}
-
+ 
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <FaIdCardAlt className="input-icon" />
+            <label htmlFor="plate">Placa</label>
             <input
               type="text"
+              id="plate"
               name="plate"
-              placeholder="Placa del vehículo"
               value={formData.plate}
               onChange={handleChange}
               required
-              maxLength="10"
             />
           </div>
-
+ 
           <div className="input-group">
-            <FaCar className="input-icon" />
+            <label htmlFor="marca">Marca</label>
             <input
               type="text"
+              id="marca"
               name="marca"
-              placeholder="Marca"
               value={formData.marca}
               onChange={handleChange}
               required
             />
           </div>
-
+ 
           <div className="input-group">
-            <FaCar className="input-icon" />
+            <label htmlFor="model">Modelo</label>
             <input
               type="text"
+              id="model"
               name="model"
-              placeholder="Modelo"
               value={formData.model}
               onChange={handleChange}
               required
             />
           </div>
-
+ 
           <div className="input-group">
-            <FaPalette className="input-icon" />
+            <label htmlFor="color">Color</label>
             <input
               type="text"
+              id="color"
               name="color"
-              placeholder="Color"
               value={formData.color}
               onChange={handleChange}
               required
             />
           </div>
-
+ 
           <div className="input-group">
-            <FaCar className="input-icon" />
-            <select
-              name="id_type"
-              value={formData.id_type}
+            <label htmlFor="user_id">ID Usuario</label>
+            <input
+              type="text"
+              id="user_id"
+              name="user_id"
+              value={formData.user_id}
               onChange={handleChange}
               required
-            >
-              {types.map(type => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
-              ))}
-            </select>
+            />
           </div>
-
+ 
           <div className="form-actions">
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="cancel-btn"
               onClick={onClose}
               disabled={loading}
             >
               Cancelar
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="submit-btn"
               disabled={loading}
             >
-              {loading ? 'Registrando...' : 'Registrar Vehículo'}
+              {loading ? 'Registrando...' : 'Registrar'}
             </button>
           </div>
         </form>
@@ -159,5 +137,5 @@ const VehicleModal = ({ onClose, onSuccess }) => {
     </div>
   );
 };
-
+ 
 export default VehicleModal;
