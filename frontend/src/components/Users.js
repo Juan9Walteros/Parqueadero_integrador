@@ -119,12 +119,7 @@ const Users = () => {
                     <td>{user.phone || '-'}</td>
                     <td>{user.role_id === 1 ? 'Admin' : 'Usuario'}</td>
                     <td>
-                      <button
-                        className="edit-btn"
-                        onClick={() => navigate(`/editar-usuario/${user.id}`)}
-                      >
-                        <FaEdit />
-                      </button>
+                      
                       <button
                         className="delete-btn"
                         onClick={() => handleDelete(user.id)}
