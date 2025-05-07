@@ -1,131 +1,198 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './CreateUser.css';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./CreateUser.css";
+import { FaUser, FaLock, FaPhone, FaIdCard, FaArrowLeft } from "react-icons/fa";
 
 const CreateUser = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    phone: '',
-    id_rol: 2 // Puedes dejarlo fijo o hacerlo editable
+    name: "",
+    documento: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    phone: "",
+    id_rol: 2
   });
-
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
+    setMessage("");
+    setIsLoading(true);
+
+    // Validaciones
+    if (formData.password !== formData.password_confirmation) {
+      setMessage("Las contraseñas no coinciden");
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setMessage("La contraseña debe tener al menos 6 caracteres");
+      setIsLoading(false);
+      return;
+    }
 
     try {
-      await axios.post('/api/users', formData, {
+      const response = await axios.post("/api/register", {
+        name: formData.name.trim(),
+        documento: formData.documento.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+        phone: formData.phone.trim(),
+        id_rol: formData.id_rol
+      }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       });
-      navigate('/home'); // ✅ redirigir a Home después de crear
+
+      setMessage("¡Usuario creado exitosamente!");
+      
+      setTimeout(() => {
+        navigate("/home"); // Redirige al home o listado de usuarios
+      }, 2000);
+
     } catch (err) {
-      setError(err.response?.data?.message || 'Error al crear usuario');
+      console.error("Error al crear usuario:", err);
+      const errorMessage = err.response?.data?.errors 
+        ? Object.values(err.response.data.errors).flat().join(", ")
+        : err.response?.data?.message || "Error en el servidor";
+      
+      setMessage(errorMessage);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   return (
-    <div className="create-user-container">
-      <h1>Crear Usuario</h1>
+    <div className='auth-wrapper'>
+      <button 
+        onClick={() => navigate(-1)}
+        className="back-button"
+      >
+        <FaArrowLeft /> Volver
+      </button>
 
-      {error && <div className="error-message">{error}</div>}
+      <form onSubmit={handleSubmit} className="auth-form">
+        <h1>Crear Usuario</h1>
+        
+        {message && (
+          <div className={`auth-message ${message.includes("Error") ? "error" : "success"}`}>
+            {message}
+          </div>
+        )}
 
-      <form className="create-user-form" onSubmit={handleSubmit}>
-        <label>
-          Nombre:
+        <div className="input-group">
+          <FaUser className="input-icon" />
           <input
             type="text"
             name="name"
+            placeholder="Nombre Completo"
             value={formData.name}
             onChange={handleChange}
             required
+            minLength="3"
           />
-        </label>
+        </div>
 
-        <label>
-          Correo:
+        <div className="input-group">
+          <FaIdCard className="input-icon" />
+          <input
+            type="text"
+            name="documento"
+            placeholder="Cédula"
+            value={formData.documento}
+            onChange={handleChange}
+            required
+            minLength="3"
+          />
+        </div>
+
+        <div className="input-group">
+          <FaUser className="input-icon" />
           <input
             type="email"
             name="email"
+            placeholder="Correo Electrónico"
             value={formData.email}
             onChange={handleChange}
             required
           />
-        </label>
+        </div>
 
-        <label>
-          Contraseña:
+        <div className="input-group">
+          <FaPhone className="input-icon" />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Teléfono"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            pattern="[0-9]{10,15}"
+            title="Número de teléfono válido (10-15 dígitos)"
+          />
+        </div>
+
+        <div className="input-group">
+          <FaLock className="input-icon" />
           <input
             type="password"
             name="password"
+            placeholder="Contraseña"
             value={formData.password}
             onChange={handleChange}
             required
+            minLength="6"
           />
-        </label>
+        </div>
 
-        <label>
-          Confirmar Contraseña:
+        <div className="input-group">
+          <FaLock className="input-icon" />
           <input
             type="password"
             name="password_confirmation"
+            placeholder="Confirmar Contraseña"
             value={formData.password_confirmation}
             onChange={handleChange}
             required
           />
-        </label>
+        </div>
 
-        <label>
-          Teléfono:
-          <input
-            type="number"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <label>
-          Rol:
+        <div className="input-group">
+          <FaIdCard className="input-icon" />
           <select
             name="id_rol"
             value={formData.id_rol}
             onChange={handleChange}
-            required
+            className="role-select"
           >
-            <option value={1}>Admin</option>
-            <option value={2}>Usuario</option>
+            <option value="1">Administrador</option>
+            <option value="2">Usuario Normal</option>
           </select>
-        </label>
-
-        <div className="form-buttons">
-          <button type="submit" disabled={loading}>
-            {loading ? 'Creando...' : 'Crear Usuario'}
-          </button>
-          <button type="button" onClick={() => navigate('/home')}>
-            Volver
-          </button>
         </div>
+
+        <button 
+          type="submit" 
+          className="auth-button"
+          disabled={isLoading}
+        >
+          {isLoading ? "Creando..." : "Crear Usuario"}
+        </button>
+
       </form>
     </div>
   );

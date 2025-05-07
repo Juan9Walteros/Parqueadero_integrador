@@ -7,6 +7,7 @@ import { FaUser, FaLock, FaPhone, FaIdCard, FaArrowLeft } from "react-icons/fa";
 const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
+    documento: "",
     email: "",
     password: "",
     password_confirmation: "",
@@ -38,6 +39,7 @@ const Register = () => {
     try {
       const response = await axios.post("/api/register", {
         name: formData.name.trim(),
+        documento: formData.documento.trim(),
         email: formData.email.trim().toLowerCase(),
         password: formData.password,
         password_confirmation: formData.password_confirmation,
@@ -49,7 +51,7 @@ const Register = () => {
       setMessage("¡Registro exitoso! Redirigiendo al login...");
       
       setTimeout(() => {
-        navigate("/home", { state: { registrationSuccess: true } });
+        navigate("/", { state: { registrationSuccess: true } });
       }, 2000);
 
     } catch (err) {
@@ -97,6 +99,19 @@ const Register = () => {
             name="name"
             placeholder="Nombre Completo"
             value={formData.name}
+            onChange={handleChange}
+            required
+            minLength="3"
+          />
+        </div>
+
+        <div className="input-group">
+          <FaUser className="input-icon" />
+          <input
+            type="text"
+            name="documento"
+            placeholder="Cedula"
+            value={formData.documento}
             onChange={handleChange}
             required
             minLength="3"
@@ -163,7 +178,6 @@ const Register = () => {
             className="role-select"
           >
             <option value="2">Usuario Normal</option>
-            <option value="1">Administrador</option>
           </select>
         </div>
 

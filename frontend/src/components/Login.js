@@ -23,22 +23,24 @@ const Login = () => {
 
       // Guardar datos de autenticación
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userId", response.data.user.id); // Guardar el ID del usuario
+      localStorage.setItem("userId", response.data.user.id);
+      localStorage.setItem("userRole", response.data.user.id_rol); // <-- CAMBIADO a id_rol
+
       if (rememberMe) {
         localStorage.setItem("rememberMe", "true");
       }
 
       setMessage("Inicio de sesión exitoso");
-      
-      // Redirección según el ID del usuario
+
+      // Redirección según el rol (usando id_rol)
       setTimeout(() => {
-        if (response.data.user.id === 1) {
+        if (response.data.user.id_rol === 1) { // <-- comparar id_rol
           navigate("/home"); // Admin
         } else {
           navigate("/home-user"); // Usuario regular
         }
       }, 1000);
-      
+
     } catch (err) {
       setMessage(err.response?.data?.message || "Error en las credenciales");
     }
@@ -48,33 +50,33 @@ const Login = () => {
     <div className='wrapper'>
       <form onSubmit={handleSubmit}>
         <h1>Iniciar Sesión</h1>
-        
+
         <div className="input-box">
-          <input 
-            type="email" 
-            placeholder='Correo Electrónico' 
+          <input
+            type="email"
+            placeholder='Correo Electrónico'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required 
+            required
           />
           <FaUser className='icon' />
         </div>
-        
+
         <div className="input-box">
-          <input 
-            type="password" 
-            placeholder='Contraseña' 
+          <input
+            type="password"
+            placeholder='Contraseña'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required 
+            required
           />
           <FaLock className='icon' />
         </div>
-        
+
         <div className="remember-forgot">
           <label>
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
             />
@@ -82,9 +84,9 @@ const Login = () => {
           </label>
           <a href="#">¿Olvidaste tu contraseña?</a>
         </div>
-        
+
         <button type="submit">Iniciar Sesión</button>
-        
+
         {message && (
           <div className={`message ${message.includes("Error") ? "error" : "success"}`}>
             {message}

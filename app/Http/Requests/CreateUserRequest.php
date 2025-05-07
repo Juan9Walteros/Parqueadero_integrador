@@ -24,6 +24,7 @@ class CreateUserRequest extends FormRequest
     {
         return [
             "name" => ["required", "string"],
+            "documento" => ["required", "string"],
             "email" => ["required", "string"],
             "password" => [
                 "required",

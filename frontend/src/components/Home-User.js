@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaSignOutAlt, FaPlus, FaCar } from 'react-icons/fa';
+import { FaSignOutAlt, FaPlus, FaCar, FaEdit, FaTrash } from 'react-icons/fa';
 import './Home.css';
 
 const UserHome = () => {
@@ -13,13 +13,11 @@ const UserHome = () => {
   const fetchUserVehicles = async () => {
     try {
       const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
-      
-      // Cambiar la URL para obtener solo vehículos del usuario
-      const response = await axios.get(`/api/vehicles/${userId}`, {
+      const response = await axios.get('/api/vehicles', {
         headers: { Authorization: `Bearer ${token}` }
       });
       
+      // El backend ya filtra los vehículos del usuario
       setVehicles(response.data.vehicles || []);
     } catch (err) {
       console.error('Error al cargar vehículos:', err);
@@ -29,6 +27,21 @@ const UserHome = () => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (vehicleId) => {
+    if (!window.confirm('¿Estás seguro de eliminar este vehículo?')) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`/api/vehicles/${vehicleId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchUserVehicles(); // Recargar la lista
+    } catch (err) {
+      console.error('Error al eliminar vehículo:', err);
+      setError('No se pudo eliminar el vehículo');
     }
   };
 
@@ -54,31 +67,31 @@ const UserHome = () => {
       <main className="content-area">
         <section className="vehicles-section">
           <div className="section-header">
-            <h2>Listado de Vehículos</h2>
+            <h2>Mis Vehículos Registrados</h2>
             <button
-              onClick={() => navigate('/crear-vehiculo')}
+              onClick={() => navigate('/vehicles/create')}
               className="add-vehicle-btn"
             >
-              <FaPlus /> Agregar Vehículo
+              <FaPlus /> Nuevo Vehículo
             </button>
           </div>
 
           {loading ? (
-            <p>Cargando vehículos...</p>
+            <div className="loading">Cargando...</div>
           ) : error ? (
-            <p className="error-message">{error}</p>
+            <div className="error-message">{error}</div>
           ) : vehicles.length === 0 ? (
-            <div className="no-vehicles">
-              <p>No tienes vehículos registrados.</p>
+            <div className="empty-state">
+              <p>No tienes vehículos registrados</p>
               <button 
-                onClick={() => navigate('/crear-vehiculo')}
+                onClick={() => navigate('/vehicles/create')}
                 className="primary-btn"
               >
                 <FaPlus /> Registrar mi primer vehículo
               </button>
             </div>
           ) : (
-            <div className="table-container">
+            <div className="table-responsive">
               <table className="vehicles-table">
                 <thead>
                   <tr>
@@ -96,12 +109,18 @@ const UserHome = () => {
                       <td>{vehicle.brand}</td>
                       <td>{vehicle.model}</td>
                       <td>{vehicle.color}</td>
-                      <td>
+                      <td className="actions">
                         <button 
-                          onClick={() => navigate(`/vehiculos/${vehicle.id}`)}
-                          className="action-btn"
+                          onClick={() => navigate(`/vehicles/${vehicle.id}/edit`)}
+                          className="edit-btn"
                         >
-                          Ver detalles
+                          <FaEdit />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(vehicle.id)}
+                          className="delete-btn"
+                        >
+                          <FaTrash />
                         </button>
                       </td>
                     </tr>

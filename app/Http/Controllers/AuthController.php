@@ -27,6 +27,7 @@ class AuthController extends Controller
             // Crear un nuevo usuario con los datos proporcionados
             $user = User::create([
                 'name' => $data['name'],
+                "documento" => $data ["documento"],
                 'email' => $data['email'],
                 'password' => bcrypt($data['password']),
                 'id_rol' => $data['id_rol'],

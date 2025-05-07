@@ -20,4 +20,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'store']);
+Route::post('/accessrecords/scan/{qr_code}', [AccessRecordsController::class, 'scanQRCode']);
+
+
+
+
     

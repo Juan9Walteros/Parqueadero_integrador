@@ -9,6 +9,7 @@ const UserEdit = () => {
   
   const [user, setUser] = useState({
     name: '',
+    documento: '',
     email: '',
     phone: '',
     id_rol: 2,
@@ -31,6 +32,7 @@ const UserEdit = () => {
         if (response.data.user) {
           setUser({
             name: response.data.user.name || '',
+            documento: response.data.user.documento || '',
             email: response.data.user.email || '',
             phone: response.data.user.phone || '',
             id_rol: response.data.user.id_rol || 2,
@@ -68,6 +70,7 @@ const UserEdit = () => {
     try {
       const response = await axios.put(`/api/users/${id}`, {
         name: user.name,
+        documento: user.documento,
         email: user.email,
         phone: user.phone,
         id_rol: user.id_rol,
@@ -109,6 +112,17 @@ const UserEdit = () => {
             type="text"
             name="name"
             value={user.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Documento</label>
+          <input
+            type="documento"
+            name="documento"
+            value={user.documento}
             onChange={handleChange}
             required
           />

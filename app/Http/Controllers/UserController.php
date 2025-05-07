@@ -191,6 +191,7 @@ class UserController extends Controller
             // Actualizar el usuario con los datos proporcionados
             $user->update([
                 'name' => $data['name'],
+                'documento' => $data['documento'],
                 'email' => $data['email'],
                 'password' => bcrypt($data['password']),
                 'id_rol' => $data['id_rol'],
