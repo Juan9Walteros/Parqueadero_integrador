@@ -5,6 +5,10 @@ import Vehicles from './components/Vehicles';
 import Parkings from './components/Parkings';
 import Login from './components/Login';
 import Register from './components/Register';
+import CreateUser from './components/CreateUser';
+import EditUser from './components/EditUser';
+import CreateVehicle from './components/CreateVehicle';
+
  
 function App() {
   return (
@@ -16,6 +20,10 @@ function App() {
         <Route path="/usuarios" element={<Users />} />
         <Route path="/vehiculos" element={<Vehicles />} />
         <Route path="/estacionamientos" element={<Parkings />} />
+        <Route path="/crear-usuario" element={<CreateUser />} />
+        <Route path="/editar-usuario/:id" element={<EditUser />} />
+        <Route path="/vehicles/create" element={<CreateVehicle />} />
+
       </Routes>
     </BrowserRouter>
   );

@@ -34,13 +34,7 @@ class VehiclesController extends Controller
 
           try{
 
-            if (!AuthHelper::isAdmin())
-            {
-                return response()->json([
-                 
-                    'message' => 'el usuario no es un administrador'   
-                ]);
-            }
+            
 
             $vehicles = vehicles::all();
 

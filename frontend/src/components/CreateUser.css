@@ -1,0 +1,114 @@
+.create-user-container {
+  max-width: 500px;
+  width: 90%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  color: #fff;
+}
+
+.create-user-container h1 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.error-message {
+  background: rgba(255, 0, 0, 0.1);
+  color: #f00;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.create-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.create-user-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.create-user-form input,
+.create-user-form select {
+  width: 100%;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  font-size: 1rem;
+  color: #fff;
+  outline: none;
+  transition: all 0.3s;
+  margin-top: 5px;
+}
+
+.create-user-form input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.create-user-form input:focus,
+.create-user-form select:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 12px;
+  background: #fff;
+  color: #333;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.form-buttons button:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.form-buttons button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .create-user-container {
+    padding: 1.5rem;
+  }
+
+  .create-user-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .create-user-form input,
+  .create-user-form select {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+}

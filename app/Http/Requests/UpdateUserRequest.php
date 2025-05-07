@@ -32,7 +32,6 @@ class UpdateUserRequest extends FormRequest
             ],
             "password" => [
                 "required",
-                "confirmed",
                 PasswordRules::min(8)->letters()->symbols()->numbers(),
             ],
             "phone" => [
