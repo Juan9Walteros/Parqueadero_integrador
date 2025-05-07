@@ -1,0 +1,177 @@
+/* VehicleModal.css - Estilos específicos para el modal de vehículos */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-container {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    position: relative;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .close-btn:hover {
+    color: #333;
+  }
+  
+  .modal-container h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    text-align: center;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+  }
+  
+  /* Estilos para grupos de formulario */
+  .input-group {
+    margin-bottom: 1.2rem;
+    position: relative;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #555;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 1rem;
+  }
+  
+  .input-group input,
+  .input-group select {
+    width: 100%;
+    padding: 10px 10px 10px 35px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .input-group input:focus,
+  .input-group select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+  }
+  
+  /* Estilos para acciones del formulario */
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+  }
+  
+  .cancel-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+  }
+  
+  .cancel-btn:hover {
+    background: #d32f2f;
+  }
+  
+  .submit-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+  }
+  
+  .submit-btn:hover {
+    background: #45a049;
+  }
+  
+  .submit-btn:disabled,
+  .cancel-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 480px) {
+    .modal-container {
+      width: 95%;
+      padding: 20px 15px;
+    }
+    
+    .form-actions {
+      flex-direction: column;
+    }
+    
+    .cancel-btn,
+    .submit-btn {
+      width: 100%;
+    }
+
+    .qr-preview {
+        margin: 20px 0;
+        text-align: center;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+      }
+      
+      .qr-icon {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #333;
+      }
+      
+      .qr-image {
+        max-width: 150px;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+        border: 1px solid #ddd;
+        padding: 5px;
+        background: white;
+      }
+  }

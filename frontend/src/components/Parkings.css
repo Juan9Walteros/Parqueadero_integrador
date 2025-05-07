@@ -1,0 +1,150 @@
+/* Estilos base iguales a Home */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .home-header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .sections-nav {
+    display: flex;
+    background-color: #34495e;
+    padding: 0.5rem;
+  }
+  
+  .section-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 4px;
+  }
+  
+  .section-btn.active {
+    background-color: #3498db;
+  }
+  
+  .content-area {
+    flex: 1;
+    padding: 2rem;
+    background-color: white;
+    margin: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Estilos específicos para Parkings */
+  .parkings-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .search-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  
+  .search-container {
+    position: relative;
+    width: 300px;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7f8c8d;
+  }
+  
+  .search-container input {
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .data-table th {
+    background-color: #3498db;
+    color: white;
+    padding: 1rem;
+    text-align: left;
+  }
+  
+  .data-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  
+  .data-table tr:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+  }
+  
+  .status-badge.available {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .status-badge.occupied {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  /* Estilos para loading y errores */
+  .loading-message {
+    color: #3498db;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { FaTimes, FaUser, FaLock, FaPhone, FaIdCard } from 'react-icons/fa';
 import './UserModal.css';
 
@@ -11,41 +12,49 @@ const UserModal = ({ onClose, onSuccess }) => {
     phone: '',
     id_rol: 2
   });
-
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validación de contraseña
+    // Validación
     if (formData.password !== formData.password_confirmation) {
       setError('Las contraseñas no coinciden');
       return;
     }
 
-    // Validación de campos requeridos
-    if (!formData.name || !formData.email || !formData.password) {
-      setError('Todos los campos son requeridos');
-      return;
-    }
+    setLoading(true);
+    setError('');
 
     try {
-      // Llama a onSuccess si existe
-      if (typeof onSuccess === 'function') {
-        onSuccess(formData);
-      } else {
-        console.error('onSuccess no es una función');
+      const response = await axios.post('/api/users', {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+        phone: formData.phone.trim(),
+        id_rol: formData.id_rol
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.data && response.data.user) {
+        onSuccess(response.data.user);
+        onClose();
       }
-      
-      onClose();
     } catch (err) {
-      setError('Error al procesar el formulario');
-      console.error(err);
+      setError(err.response?.data?.message || 'Error al crear usuario');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,7 +99,7 @@ const UserModal = ({ onClose, onSuccess }) => {
             <input
               type="password"
               name="password"
-              placeholder="Contraseña"
+              placeholder="Contraseña (mínimo 6 caracteres)"
               value={formData.password}
               onChange={handleChange}
               required
@@ -115,7 +124,7 @@ const UserModal = ({ onClose, onSuccess }) => {
             <input
               type="tel"
               name="phone"
-              placeholder="Teléfono"
+              placeholder="Teléfono (opcional)"
               value={formData.phone}
               onChange={handleChange}
             />
@@ -134,11 +143,20 @@ const UserModal = ({ onClose, onSuccess }) => {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button 
+              type="button" 
+              className="cancel-btn"
+              onClick={onClose}
+              disabled={loading}
+            >
               Cancelar
             </button>
-            <button type="submit" className="submit-btn">
-              Crear Usuario
+            <button 
+              type="submit" 
+              className="submit-btn"
+              disabled={loading}
+            >
+              {loading ? 'Creando...' : 'Crear Usuario'}
             </button>
           </div>
         </form>

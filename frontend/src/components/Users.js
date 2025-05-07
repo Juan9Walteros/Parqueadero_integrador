@@ -10,8 +10,9 @@ const Users = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
+  // Obtener usuarios
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -32,6 +33,7 @@ const Users = () => {
     fetchUsers();
   }, []);
 
+  // Eliminar usuario
   const handleDelete = async (id) => {
     if (window.confirm('¿Eliminar este usuario?')) {
       try {
@@ -40,20 +42,22 @@ const Users = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         });
+        setUsers(users.filter(user => user.id !== id));
         setSuccess('Usuario eliminado correctamente');
-        fetchUsers();
       } catch (err) {
         setError(err.response?.data?.message || 'Error al eliminar usuario');
       }
     }
   };
 
+  // Crear nuevo usuario
   const handleUserCreated = (newUser) => {
     setUsers([...users, newUser]);
     setSuccess('Usuario creado correctamente');
-    setShowModal(false);
+    setShowCreateModal(false);
   };
 
+  // Filtrar usuarios
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -78,7 +82,7 @@ const Users = () => {
         </div>
         <button 
           className="add-user-btn"
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowCreateModal(true)}
         >
           <FaPlus /> Nuevo Usuario
         </button>
@@ -102,7 +106,7 @@ const Users = () => {
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone || '-'}</td>
-                  <td>{user.id_rol === 1 ? 'Admin' : 'Usuario'}</td>
+                  <td>{user.role_id === 1 ? 'Admin' : 'Usuario'}</td>
                   <td>
                     <button 
                       className="delete-btn"
@@ -124,9 +128,10 @@ const Users = () => {
         </table>
       </div>
 
-      {showModal && (
+      {/* Modal de creación */}
+      {showCreateModal && (
         <UserModal
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowCreateModal(false)}
           onSuccess={handleUserCreated}
         />
       )}

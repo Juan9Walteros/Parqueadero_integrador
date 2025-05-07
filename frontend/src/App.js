@@ -1,27 +1,29 @@
-// filepath: c:\Users\dtc59\Desktop\Parqueadero_Integrador\Parqueadero_Integrador\Parqueadero_Integrador\parqueadero\frontend\src\App.js
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import Users from "./components/Users";
-import Vehicles from "./components/Vehicles"
-import Parkings from "./components/Parkings"
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import HomeLayout from './components/Home'; // Renombrado a HomeLayout para mayor claridad
+import Users from './components/Users';
+import Vehicles from './components/Vehicles';
+import Parkings from './components/Parkings';
+import Login from './components/Login';
 
-
-const App = () => {
+function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
+        {/* Ruta login */}
         <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/vehicles" element={<Vehicles />} />
-        <Route path="/parkings" element={<Parkings />} />
+        
+        {/* Layout principal (solo para /home) */}
+        <Route path="/home" element={<HomeLayout />} />
+        
+        {/* Rutas completamente independientes */}
+        <Route path="/home/vehicles" element={<Vehicles />} />
+        <Route path="/home/parkings" element={<Parkings />} />
+        
+        {/* Redirecciones */}
+        <Route path="/home" element={<Navigate to="/home" replace />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;

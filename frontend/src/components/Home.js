@@ -1,9 +1,6 @@
 import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaSignOutAlt, FaUser, FaCar, FaParking } from 'react-icons/fa';
-import Usuarios from './Users';
-import Vehiculos from './Vehicles'; // Componente similar para vehículos
-import Parkings from './Parkings';   // Componente similar para parkings
 import './Home.css';
 
 const Home = () => {
@@ -11,7 +8,16 @@ const Home = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/');
+    navigate('/login');
+  };
+
+  // Función de navegación absoluta garantizada
+  const navigateTo = (path) => {
+    // Solución definitiva para evitar rutas anidadas
+    if (window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }
   };
 
   return (
@@ -26,33 +32,23 @@ const Home = () => {
       <nav className="sections-nav">
         <button 
           className="section-btn"
-          onClick={() => navigate('/home')}
+          onClick={() => navigateTo('/home')}
         >
           <FaUser /> Usuarios
         </button>
         <button 
           className="section-btn"
-          onClick={() => navigate('/home/vehiculos')}
+          onClick={() => navigateTo('/vehicles')}
         >
           <FaCar /> Vehículos
         </button>
         <button 
           className="section-btn"
-          onClick={() => navigate('/home/parkings')}
+          onClick={() => navigateTo('/parkings')}
         >
           <FaParking /> Parkings
         </button>
       </nav>
-
-      <main className="content-area">
-        <Routes>
-          <Route path="usuarios" element={<Usuarios />} />
-          <Route path="vehiculos" element={<Vehiculos />} />
-          <Route path="parkings" element={<Parkings />} />
-          {/* Ruta por defecto */}
-          <Route path="*" element={<Usuarios />} />
-        </Routes>
-      </main>
     </div>
   );
 };
