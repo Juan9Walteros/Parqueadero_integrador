@@ -261,52 +261,55 @@ class AccessRecordsController extends Controller
     }
 
     public function scanQRCode($qr_code): JsonResponse
-{
-    try {
-        // Buscar el vehículo por el código QR
-        $vehicle = Vehicles::where('qr_code', $qr_code)->first();
-
-        // Si no se encuentra el vehículo asociado al código QR
-        if (!$vehicle) {
+    {
+        try {
+            // Buscar el vehículo por el código QR
+            $vehicle = Vehicles::where('qr_code', $qr_code)->first();
+    
+            // Si no se encuentra el vehículo asociado al código QR
+            if (!$vehicle) {
+                return response()->json([
+                    'message' => 'No se encontró vehículo asociado al código QR'
+                ], 404);
+            }
+    
+            // Verificar si ya hay una entrada activa (es decir, una entrada sin salida)
+            $activeAccessRecord = Access_records::where('id_vehicle', $vehicle->id)
+                                                ->whereNull('exit_time') // Salida nula
+                                                ->first();
+    
+            if ($activeAccessRecord) {
+                // Si hay una entrada sin salida, se registra una salida
+                $activeAccessRecord->exit_time = now();
+                $activeAccessRecord->save(); // Guardar la salida
+    
+                return response()->json([
+                    'message' => 'Salida registrada correctamente',
+                    'Registro' => $activeAccessRecord
+                ]);
+            } else {
+                // Si no hay entrada activa, se puede registrar una nueva entrada
+                $accessRecord = Access_records::create([
+                    'id_vehicle' => $vehicle->id,  // Relacionar el vehículo con el acceso
+                    'entry_time' => now(),         // Establecer la hora de entrada
+                    'exit_time' => null            // Salida nula al inicio
+                ]);
+    
+                return response()->json([
+                    'message' => 'Entrada registrada correctamente',
+                    'Registro' => $accessRecord
+                ], 201); // Código HTTP 201 para creación exitosa
+            }
+    
+        } catch (Exception $e) {
             return response()->json([
-                'message' => 'No se encontró vehículo asociado al código QR'
-            ], 404);
+                'message' => 'Error al procesar el escaneo: ' . $e->getMessage()
+            ], 500); // Código HTTP 500 para error del servidor
         }
-
-        // Verificar si ya hay una entrada activa (es decir, una entrada sin salida)
-        $activeAccessRecord = Access_records::where('id_vehicle', $vehicle->id)
-                                            ->whereNull('exit_time') // Salida nula
-                                            ->first();
-
-        if ($activeAccessRecord) {
-            // Si hay una entrada sin salida, se registra una salida
-            $activeAccessRecord->exit_time = now();
-            $activeAccessRecord->save(); // Guardar la salida
-
-            return response()->json([
-                'message' => 'Salida registrada correctamente',
-                'Registro' => $activeAccessRecord
-            ]);
-        } else {
-            // Si no hay entrada activa, se puede registrar una nueva entrada
-            $accessRecord = Access_records::create([
-                'id_vehicle' => $vehicle->id,  // Relacionar el vehículo con el acceso
-                'entry_time' => now(),         // Establecer la hora de entrada
-                'exit_time' => null            // Salida nula al inicio
-            ]);
-
-            return response()->json([
-                'message' => 'Entrada registrada correctamente',
-                'Registro' => $accessRecord
-            ], 201); // Código HTTP 201 para creación exitosa
-        }
-
-    } catch (Exception $e) {
-        return response()->json([
-            'message' => 'Error al procesar el escaneo: ' . $e->getMessage()
-        ], 500); // Código HTTP 500 para error del servidor
     }
-}
+    
+    
+    }
 
+    
 
-}

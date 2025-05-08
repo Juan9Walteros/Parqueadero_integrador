@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus, FaSearch, FaTrash, FaSignOutAlt, FaCar, FaParking, FaUser, FaEdit } from 'react-icons/fa';
+import { FaPlus, FaSearch, FaTrash, FaSignOutAlt, FaCar, FaUser, FaEdit } from 'react-icons/fa';
 import './Users.css';
 
 const Users = () => {
@@ -78,9 +78,6 @@ const Users = () => {
         </button>
         <button className="section-btn" onClick={() => navigate('/vehiculos')}>
           <FaCar /> Vehículos
-        </button>
-        <button className="section-btn" onClick={() => navigate('/estacionamientos')}>
-          <FaParking /> Estacionamientos
         </button>
       </nav>
 

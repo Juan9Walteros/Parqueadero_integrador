@@ -1,243 +1,266 @@
 /* Estilos generales */
 .users-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .error-message {
-    color: #d11a2a;
-    background: #ffebee;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-  }
-  
-  .success-message {
-    color: #2e7d32;
-    background: #e8f5e9;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-  }
-  
-  .loading-message {
-    color: #1565c0;
-    background: #e3f2fd;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-  }
-  
-  /* Header y búsqueda */
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.error-message,
+.success-message,
+.loading-message {
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  color: #d32f2f;
+  background: #ffebee;
+}
+
+.success-message {
+  color: #388e3c;
+  background: #e8f5e9;
+}
+
+.loading-message {
+  color: #1565c0;
+  background: #e3f2fd;
+}
+
+/* Header y búsqueda */
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  flex-grow: 1;
+  max-width: 400px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.search-container input {
+  border: none;
+  outline: none;
+  margin-left: 10px;
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* Botones */
+.add-button {
+  background: #5F6F65;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+.add-button:hover {
+  background: #6f7f75;
+}
+
+/* Tabla */
+.users-table-container {
+  overflow-x: auto;
+  margin-bottom: 30px;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+
+.users-table th {
+  background: #5F6F65;
+  color: #fff;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  border-top: 1px solid #5F6F65;
+}
+
+.users-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.users-table tr:last-child td {
+  border-bottom: none;
+}
+
+.users-table tr:hover {
+  background: #f5f5f5;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  transition: color 0.2s ease;
+}
+
+.delete-button:hover {
+  color: #b71c1c;
+}
+
+.delete-button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #5F6F65;
+  margin-bottom: 20px;
+}
+
+/* Formulario */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #5F6F65;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #9CA986;
+  box-shadow: 0 0 3px rgba(156, 169, 134, 0.5);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.submit-button {
+  background: #5F6F65;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+.submit-button:hover {
+  background: #6f7f75;
+}
+
+.submit-button:disabled {
+  background: #C9DABF;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .users-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-  
-  .search-container {
-    display: flex;
-    align-items: center;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 8px 12px;
-    flex-grow: 1;
-    max-width: 400px;
-  }
-  
-  .search-container input {
-    border: none;
-    outline: none;
-    margin-left: 8px;
-    width: 100%;
-    font-size: 1rem;
-  }
-  
-  /* Botones */
-  .add-button {
-    background: #5F6F65;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1rem;
-  }
-  
-  .add-button:hover {
-    background: #808D7C;
-  }
-  
-  /* Tabla */
-  .users-table-container {
-    overflow-x: auto;
-    margin-bottom: 30px;
-  }
-  
-  .users-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .users-table th {
-    background: #5F6F65;
-    color: white;
-    padding: 12px 15px;
-    text-align: left;
-  }
-  
-  .users-table td {
-    padding: 10px 15px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .users-table tr:hover {
-    background: #f9f9f9;
-  }
-  
-  .delete-button {
-    background: none;
-    border: none;
-    color: #d11a2a;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 5px;
-  }
-  
-  .delete-button:disabled {
-    color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .no-data {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-  }
-  
-  /* Modal */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    background: white;
-    padding: 25px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  
-  .modal-content h2 {
-    margin-top: 0;
-    color: #5F6F65;
-  }
-  
-  /* Formulario */
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #5F6F65;
-  }
-  
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  .form-group input:focus,
-  .form-group select:focus {
-    outline: none;
-    border-color: #9CA986;
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .submit-button {
-    background: #5F6F65;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .submit-button:hover {
-    background: #808D7C;
-  }
-  
-  .submit-button:disabled {
-    background: #C9DABF;
-    cursor: not-allowed;
-  }
-  
-  .cancel-button {
-    background: #f5f5f5;
-    color: #333;
-    border: 1px solid #ddd;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .cancel-button:hover {
-    background: #e0e0e0;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .users-header {
       flex-direction: column;
       align-items: stretch;
-    }
-    
-    .search-container {
-      max-width: 100%;
-    }
-    
-    .users-table {
-      font-size: 0.9rem;
-    }
-    
-    .users-table th,
-    .users-table td {
-      padding: 8px 10px;
-    }
   }
+
+  .search-container {
+      max-width: 100%;
+  }
+
+  .users-table {
+      font-size: 0.9rem;
+  }
+
+  .users-table th,
+  .users-table td {
+      padding: 8px 10px;
+  }
+}

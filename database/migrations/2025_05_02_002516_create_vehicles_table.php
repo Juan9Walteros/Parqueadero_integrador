@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('marca')->nullable(value: false);
             $table->string('model')->nullable(value: false);
             $table->string('color')->nullable(value: false);
-            $table->integer('id_user')->nullable(value: false)->onDelete('cascade');   
+            $table->integer('id_user')->unique()->nullable(value: false)->onDelete('cascade');   
             $table->string('qr_code')->nullable(value: false);  
             $table->integer('id_type')->nullable(value: false)->onDelete('cascade'); 
             $table->timestamps();

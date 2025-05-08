@@ -38,13 +38,7 @@ class ParkingsController extends Controller
           try{
 
 //            if (!AuthHelper::isAdmin() || !AuthHelper::isWarden())
-            if (AuthHelper::isUser())
-            {
-                return response()->json([
-                 
-                    'message' => 'el usuario no es un administrador'   
-                ]);
-            }
+            
 
             $parkings = Parkings::all();
 

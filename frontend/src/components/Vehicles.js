@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaCar, FaPlus, FaSignOutAlt, FaUser, FaParking, FaEdit, FaTrash, FaSearch, FaSave, FaTimes } from 'react-icons/fa';
+import { FaCar, FaPlus, FaSignOutAlt, FaUser, FaEdit, FaTrash, FaSearch, FaSave, FaTimes } from 'react-icons/fa';
 import './Vehicles.css';
 
 const Vehicles = () => {
@@ -135,9 +135,6 @@ const Vehicles = () => {
         </button>
         <button className="section-btn active">
           <FaCar /> Vehículos
-        </button>
-        <button className="section-btn" onClick={() => navigate('/estacionamientos')}>
-          <FaParking /> Estacionamientos
         </button>
       </nav>
 
@@ -301,3 +298,4 @@ const Vehicles = () => {
 };
 
 export default Vehicles;
+ 

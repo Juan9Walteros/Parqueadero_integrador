@@ -11,8 +11,10 @@ use App\Models\User;
 use App\Models\Vehicles;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Client\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
  
 class VehiclesController extends Controller
 
@@ -257,5 +259,27 @@ class VehiclesController extends Controller
         }
 
     }
+
+    public function getUserVehicles(Request $request)
+{
+    try {
+        // No se necesita obtener el usuario autenticado
+        // Simplemente devolver todos los vehículos, o si quieres filtrar según alguna otra lógica
+        $vehicles = Vehicles::all();
+
+        return response()->json([
+            'Vehiculos' => $vehicles,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error al obtener vehículos: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+
+   
+
+
 
 }

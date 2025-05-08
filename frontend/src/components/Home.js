@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaSignOutAlt, FaUser, FaCar, FaParking, FaSearch, FaClock, FaArrowRight, FaArrowLeft, FaTrash } from 'react-icons/fa';
+import { FaSignOutAlt, FaUser, FaCar, FaSearch, FaClock, FaArrowRight, FaArrowLeft, FaTrash, FaBarcode } from 'react-icons/fa';
 import './Home.css';
 
 const Home = () => {
@@ -12,6 +12,7 @@ const Home = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [qrCode, setQrCode] = useState(''); // Nueva variable de estado para almacenar el código QR
 
   const fetchData = async () => {
     setLoading(true);
@@ -89,6 +90,27 @@ const Home = () => {
     navigate('/');
   };
 
+  // Función para llamar a la API con el código QR
+  const handleScanQRCode = async () => {
+    if (!qrCode) {
+      setError('Por favor, ingresa un código QR válido');
+      return;
+    }
+
+    try {
+      const response = await axios.post(`/api/accessrecords/scan/${qrCode}`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setSuccess('Código QR escaneado correctamente');
+      fetchData(); // Recargar los datos
+      setQrCode(''); // Limpiar el campo de texto después de escanear el código QR
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err) {
+      console.error('Error al escanear código QR:', err);
+      setError(err.response?.data?.message || 'Error al escanear código QR');
+    }
+  };
+
   return (
     <div className="home-container">
       <header className="home-header">
@@ -107,9 +129,6 @@ const Home = () => {
         </button>
         <button className="section-btn" onClick={() => navigate('/vehiculos')}>
           <FaCar /> Vehículos
-        </button>
-        <button className="section-btn" onClick={() => navigate('/estacionamientos')}>
-          <FaParking /> Estacionamientos
         </button>
       </nav>
 
@@ -132,6 +151,19 @@ const Home = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+        </div>
+
+        {/* Botón para escanear QR */}
+        <div className="scan-qr-btn-container">
+          <input
+            type="text"
+            placeholder="Escanear código QR"
+            value={qrCode}
+            onChange={(e) => setQrCode(e.target.value)}
+          />
+          <button className="scan-qr-btn" onClick={handleScanQRCode}>
+            <FaBarcode /> Escanear QR
+          </button>
         </div>
 
         <div className="records-container">

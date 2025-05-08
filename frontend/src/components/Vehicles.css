@@ -11,7 +11,7 @@
   align-items: center;
   z-index: 1000;
 }
- 
+
 .modal-container {
   background: white;
   width: 90%;
@@ -21,7 +21,7 @@
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
   position: relative;
 }
- 
+
 /* Botón de cerrar */
 .close-btn {
   position: absolute;
@@ -32,63 +32,84 @@
   font-size: 1.2rem;
   cursor: pointer;
   color: #666;
+  transition: color 0.3s;
 }
- 
+
+.close-btn:hover {
+  color: #2d3328; /* Verde oscuro al pasar */
+}
+
 /* Título del modal */
-h2 {
+.modal-container h2 {
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: #2d3328;
+  font-size: 1.5rem;
 }
- 
+
 /* Grupos de formulario */
 .input-group {
   margin-bottom: 1.2rem;
 }
- 
+
 .input-group label {
   display: block;
   margin-bottom: 0.5rem;
   color: #333;
+  font-weight: 500;
 }
- 
+
 /* Campos de entrada */
 .input-group input {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 1rem;
-  color: black; /* Texto negro */
-  background-color: white; /* Fondo blanco */
+  color: black;
+  background-color: white;
+  transition: border-color 0.3s;
 }
- 
+
 .input-group input:focus {
   outline: none;
-  border-color: #3498db; /* Azul al enfocar */
+  border-color: #5F6F65; /* Verde oscuro al enfocar */
 }
- 
+
 /* Botones */
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  margin-top: 1rem;
 }
- 
+
 .cancel-btn {
   background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 500;
 }
- 
+
+.cancel-btn:hover {
+  background-color: #c0392b;
+}
+
 .submit-btn {
-  background-color: #3498db;
+  background-color: #5F6F65; /* Verde oscuro como en el home */
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 500;
+}
+
+.submit-btn:hover {
+  background-color: #3e4d43;
 }
